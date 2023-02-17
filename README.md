@@ -11,7 +11,7 @@ This means we have to add the existing website files when creating the docker im
 To accomplish this, we follow the steps to below:
 1. Write the Dockerfile - The dockerfile will define the parent image, install Nginx, and move the configuration and website files to the desired location.
 2. Build the image - Build an image using the Dockerfile, tag the image with the name *web*.
-3. Launch a *web01* container using the new image, map port 80 on the container to port 80 on the host. 
+3. Launch container - Launch a *web01* container using the new image, map port 80 on the container to port 80 on the host. 
 4. Test the configuration
 
 **Prerequisites**
@@ -38,5 +38,42 @@ To create the Dockerfile we use the vim command
 ```WORKDIR /var/www/html``` - Assign as the desired work directory </br>
 ```COPY --chown=nginx:nginx/files/html/ .```  - Copy the website files to work directory and ensure nginx has the right permission to access the files </br>
 ```EXPOSE 80``` -Ensure Port 80 is open </br>
-```CMD``` [ "nginx", "-g", ""pid /tmp/nginx.pid; daemon off"] - Run the command for formatting and starting Nginx
+```CMD [ "nginx", "-g", "pid /tmp/nginx.pid; daemon off;"]``` - Run the command for formatting and starting Nginx
+
+#### Step 2: Build the image
+
+To build the image use the command: </br>
+```$ docker build . -t web``` </br>
+This will build the image in the currentlly directory which contains the Dockerfile with a tagname *web*. </br>
+Confirm the build by viewing a list of images </br>
+
+![5 docker image](https://user-images.githubusercontent.com/104782642/219584943-a5e6462e-eea7-4f99-8ef6-bc4ea4f3a28e.JPG)
+
+#### Step 3: Launch Container
+To launch the container using the newly created *web* image: </br>
+```$ docker run -dt -p 80:80 --name web01 web``` </br>
+This ensure the container is detached and running in the background. The container port 80 is alos mapped to the host port 80. </br>
+To make sure this is running we can go ahead and curl localhost; this will return the HTML files from the container.
+```$ curl localhost```
+![7 curl localhost](https://user-images.githubusercontent.com/104782642/219587191-59383bd2-921b-42b7-a210-033e1033dc2c.JPG)
+
+
+We can test further by putting the IP address on our browser to see the webpage:
+
+![8 container page](https://user-images.githubusercontent.com/104782642/219590740-351f0518-1a46-4666-9220-34ea1b2cb41c.JPG)
+
+#### Conclusion
+In summary we were able to:
+1. Create a Dockerfile using alpine as the base image, alongside the necessary file and Nginx configuration
+2. Build the docker image
+3. And use the image to launch our container
+4. Test the website by using the web browser to view our landing page.
+
+
+
+
+
+
+
+
 
